@@ -25,6 +25,7 @@ secondPref = "Min HH"
 thirdPref = "Max hh"
 fourthPref = "Max HH"
 otherGender = "Female"
+selected = None
 
 
 class Dog:
@@ -303,7 +304,22 @@ def loadCallBack(i):
             male_entry_arr[r-20].insert(0, saveHolder2[(0,r)])
     
 
+def popup(event):
+    global selected
+    try:
+        menu.tk_popup(event.x_root,event.y_root) # Pop the menu up in the given coordinates
+        selected = event.widget
+    finally:
+        menu.grab_release() # Release it once an option is selected
 
+def paste():
+    clipboard = root.clipboard_get() # Get the copied item from system clipboard
+    selected.insert('end',clipboard) # Insert the item into the entry widget
+
+def copy():
+    inp = selected.get() # Get the text inside entry widget
+    root.clipboard_clear() # Clear the tkinter clipboard
+    root.clipboard_append(inp) # Append to system clipboard
 
 ##### MAIN #####
 root= tk.Tk()
@@ -321,9 +337,11 @@ for i in range(0,20):
     
     female_entry_arr.append(tk.Entry(root))
     female_entry_arr[i].grid(row = i+2, column = 1, columnspan=2, sticky = W, pady = 2)
+    female_entry_arr[i].bind('<Button-3>',popup) # Bind a func to right click
     
     male_entry_arr.append(tk.Entry(root))
     male_entry_arr[i].grid(row = i+2, column = 4, columnspan=2, sticky = W, pady = 2)
+    male_entry_arr[i].bind('<Button-3>',popup) # Bind a func to right click
     
     
 #save buttons 1 and 2
@@ -409,5 +427,9 @@ for r in range(0,20):
     tempButt = tk.Button(root, text ="Copy")
     tempButt.grid(row = r+2, column = 14, sticky = W, pady = 2)
     tempButt.configure(command=lambda widget=r: copyCallBack(widget))
+    
+menu = Menu(root,tearoff=0) # Create a menu
+menu.add_command(label='Copy',command=copy) # Create labels and commands
+menu.add_command(label='Paste',command=paste)
 
 root.mainloop()
