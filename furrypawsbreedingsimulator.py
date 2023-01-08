@@ -171,6 +171,9 @@ def createDogList(num, test):
     
     temp = []
     
+    if(len(test) == 41):
+            test = test[14:]
+    
     if(len(test) == 27):
         temp_health = []
         temp_HH = 0
@@ -217,6 +220,9 @@ def selectCallBack(i, sex):
         temp_entry = female_entry_arr[i].get().split()
     else:
         temp_entry = male_entry_arr[i].get().split()
+        
+    if(len(temp_entry) == 41):
+            temp_entry = temp_entry[14:]
         
     if(len(temp_entry) == 27):
         temp_health = []
